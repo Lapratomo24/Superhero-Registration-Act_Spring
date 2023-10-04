@@ -32,6 +32,19 @@ public class SuperheroController {
         return ResponseEntity.ok(superhero);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Superhero> updateSuperhero(@PathVariable Long id, @RequestBody Superhero superheroDetail) {
+        Superhero superhero = superheroRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Superhero with the ID " + id + " does not exist."));
 
+        superhero.setHeroName(superheroDetail.getHeroName());
+        superhero.setFirstName(superheroDetail.getFirstName());
+        superhero.setLastName(superheroDetail.getLastName());
+        superhero.setBaseOfOperation(superheroDetail.getBaseOfOperation());
+        superhero.setAffiliation(superheroDetail.getAffiliation());
+
+        Superhero updatedSuperhero = superheroRepo.save(superhero);
+        return ResponseEntity.ok(updatedSuperhero);
+
+    }
 
 }
