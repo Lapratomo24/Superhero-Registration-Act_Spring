@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController // create rest api
 @RequestMapping("/superhero")
@@ -44,7 +46,15 @@ public class SuperheroController {
 
         Superhero updatedSuperhero = superheroRepo.save(superhero);
         return ResponseEntity.ok(updatedSuperhero);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> removeSuperhero(@PathVariable Long id) {
+        Superhero superhero = superheroRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Superhero with the ID " + id + " does not exist."));
+        superheroRepo.delete(superhero);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("removed", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 
 }
